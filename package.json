@@ -4,16 +4,28 @@
   "scripts": {
     "client": "cd client && npm run start",
     "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "chatserver": "nodemon websocket.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "chatdev": "concurrently --kill-others-on-fail \"npm run chatserver\" \"npm run client\" \"npm run server\""
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "bcrypt": "^3.0.0",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "htmlparser": "^1.7.7",
-    "mongodb": "^3.0.7",
+    "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.0.16",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "webpack": "^4.16.5",
+    "ws": "^6.0.0"
   },
   "devDependencies": {
-    "concurrently": "^3.5.0"
+    "concurrently": "^3.6.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0"
   }
 }

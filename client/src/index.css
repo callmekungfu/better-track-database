@@ -1,5 +1,21 @@
 body {
-  margin: 0;
-  padding: 0;
   font-family: sans-serif;
+  overflow: hidden;
+}
+.meet-details-title {
+  text-align: center
+}
+.mb-30 {
+  margin-bottom: 30px;
+}
+.chat-content {
+  height: 75vh;
+  max-height: 75vh;
+  overflow: auto;
+}
+.chat-info {
+  margin-bottom: 5px;
+}
+.chat-input {
+  height: 12vh
 }

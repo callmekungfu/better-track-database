@@ -1,20 +1,12 @@
+import 'babel-polyfill';
 import React from 'react';
-import {render} from 'react-dom';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
-import rootReducer from './reducers';
-import App from './components/App';
-import Test from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { render } from 'react-dom';
+import Root from './track/containers/Root';
+
 import './index.css';
 
-const store = createStore(rootReducer);
-
+// Render the root of application in the element with the ID 'root'
 render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+    <Root />,
     document.getElementById('root')
 );
-//render(<Test />, document.getElementById('root'));
-registerServiceWorker();
