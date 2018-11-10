@@ -12,20 +12,21 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { addMessage, validateLogin } from '../actions';
+import { addMessage, validateLogin, typing, logout } from '../actions';
 import { store, sagaMiddleware } from '../configureStore';
 import Message from '../components/Message';
 import ChatUser from '../components/ChatUser';
 import setUpSocket from '../websocketConfig';
-import handleNewMessages from '../sagas';
+import { handleNewMessages, handleTyping } from '../sagas';
 
 let connected = false;
-
 class ChatRoom extends Component {
     constructor(props) {
         super(props);
         this.handleSendMessage = this.handleSendMessage.bind(this);
         this.handleInput = this.handleInput.bind(this);
+        this.handleCloseConnection = this.handleCloseConnection.bind(this);
+        this.state = { logout: false };
     }
 
     componentDidMount() {
@@ -42,21 +43,33 @@ class ChatRoom extends Component {
         }
     }
 
+    handleCloseConnection(e) {
+        this.setState({
+            logout: true
+        });
+    }
+
     handleInput(e, { value }) {
+        const { dispatch } = this.props;
         this.setState({
             typing: value
         });
+        dispatch(typing('Me'));
     }
 
     render() {
         if (this.props.tokenValidation.failed) {
             return <Redirect to="/login" />;
         }
-
         if (this.props.tokenValidation.validated && !connected) {
             const socket = setUpSocket(store.dispatch, this.props.tokenValidation.decoded.username);
             sagaMiddleware.run(handleNewMessages, { socket, username: this.props.tokenValidation.decoded.username });
+            sagaMiddleware.run(handleTyping, { socket, username: 'testing name' });
             connected = true;
+        }
+        if (this.state.logout) {
+            this.props.dispatch(logout());
+            return <Redirect to="/login" />;
         }
         return (
             <Grid celled="internally" style={{ height: '100vh' }}>
@@ -74,13 +87,13 @@ class ChatRoom extends Component {
                 <Grid.Column width={12} style={{ height: '100%' }}>
                     <Segment clearing vertical style={{ display: 'flex', alignItems: 'center', height: '10vh' }}>
                     <Header as="h2" floated="left">
-                        <Image circular src="https://memegenerator.net/img/instances/81642434.jpg" />
+                        <Image circular src="https://via.placeholder.com/350x350" />
                         <Header.Content>
                             Devs Chat Room
                             <Header.Subheader>Only for the coolest kids.</Header.Subheader>
                         </Header.Content>
                     </Header>
-                    <Button floated="right" negative>Leave Chat</Button>
+                    <Button floated="right" negative onClick={this.handleCloseConnection}>Leave Chat</Button>
                     </Segment>
                     <Segment vertical className="chat-content">
                         {this.props.messages.map(message => (

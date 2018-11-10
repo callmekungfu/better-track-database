@@ -1,11 +1,17 @@
 import { takeEvery } from 'redux-saga';
-import { ADD_MESSAGES } from './actions';
+import { ADD_MESSAGES, TYPING } from './actions';
 
-const handleNewMessages = function* handleNewMessages(params) {
+export const handleNewMessages = function* handleNewMessages(params) {
     yield takeEvery(ADD_MESSAGES, (action) => {
+        console.log('add message');
         action.author = params.username,
         params.socket.send(JSON.stringify(action));
     });
 };
 
-export default handleNewMessages;
+export const handleTyping = function* handleTyping(params) {
+    yield takeEvery(TYPING, (action) => {
+        const request = Object.assign({}, action, { name: params.username });
+        params.socket.send(JSON.stringify(request));
+    });
+};

@@ -12,6 +12,7 @@ export const RECEIVE_MEET_DETAILS = 'RECEIVE_MEET_DETAILS';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const LOGOUT = 'LOGOUT';
 
 export const VALIDATE_TOKEN = 'VALIDATE_TOKEN';
 export const TOKEN_GOOD = 'TOKEN_GOOD';
@@ -25,6 +26,8 @@ export const ADD_MESSAGES = 'ADD_MESSAGES';
 export const MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
 export const ADD_USER = 'ADD_USER';
 export const USERS_LIST = 'USERS_LIST';
+export const TYPING = 'TYPING';
+export const TYPERS_LIST = 'TYPERS_LIST';
 
 export const selectYear = year => ({
     type: SELECT_YEAR,
@@ -130,11 +133,18 @@ export const attemptLogin = details => (dispatch) => {
                 console.log(json);
                 Cookies.set('auth', json, { expires: json.exp });
                 dispatch(loginSuccess(json));
-                dispatch(goodToken());
+                dispatch(goodToken()); // eslint-disable-line no-use-before-define
             } else {
                 dispatch(loginFailed(json));
             }
         });
+};
+
+export const logout = () => {
+    Cookies.remove('auth');
+    return {
+        type: LOGOUT
+    };
 };
 
 const signUpRequested = () => ({
@@ -188,6 +198,16 @@ export const addUser = name => ({
     type: ADD_USER,
     name,
     id: userId++,
+});
+
+export const typing = name => ({
+    type: TYPING,
+    name
+});
+
+export const listTypers = typers => ({
+    type: TYPERS_LIST,
+    typers
 });
 
 export const messageReceived = (message, author) => ({

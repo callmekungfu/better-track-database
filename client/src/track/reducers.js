@@ -18,7 +18,9 @@ import {
     MESSAGE_RECEIVED,
     VALIDATE_TOKEN,
     TOKEN_GOOD,
-    TOKEN_BAD
+    TOKEN_BAD,
+    TYPING,
+    TYPERS_LIST
 } from './actions';
 
 function selectedYear(state = '2018', action) {
@@ -226,12 +228,22 @@ const tokenValidation = (state = {
     }
 };
 
+const typers = (state = [], action) => {
+    switch (action.type) {
+        case TYPERS_LIST:
+            return action.typers;
+        default:
+            return state;
+    }
+};
+
 const rootReducer = combineReducers({
     meetsByYear,
     selectedYear,
     meetDetails,
     loggingIn,
     loggedIn,
+    typers,
     signUp,
     messages,
     users,
